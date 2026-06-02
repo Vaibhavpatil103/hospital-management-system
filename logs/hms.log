@@ -1,0 +1,63 @@
+2026-06-01 17:20:42.358 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:20:52.537 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:21:10.624 [SwingWorker-pool-1-thread-2] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:23:52.946 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:23:52.948 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:23:53.136 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:24:03.814 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:24:10.850 [SwingWorker-pool-1-thread-2] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:25:01.833 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:25:01.836 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:25:02.051 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:25:12.931 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:26:19.845 [SwingWorker-pool-1-thread-2] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:26:19.900 [SwingWorker-pool-1-thread-2] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:26:36.745 [SwingWorker-pool-1-thread-3] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:26:36.796 [SwingWorker-pool-1-thread-3] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:28:53.967 [SwingWorker-pool-1-thread-4] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vaibhav
+2026-06-01 17:31:32.006 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:31:32.008 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:31:32.176 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:31:38.286 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:31:38.312 [SwingWorker-pool-1-thread-1] WARN  hospital.management.system.service.AuthService - Encountered legacy plaintext password for user: vp. Attempting seamless migration.
+2026-06-01 17:31:38.377 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Successfully migrated legacy password to BCrypt for user: vp
+2026-06-01 17:31:38.378 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication successful for user: vp
+2026-06-01 17:32:38.208 [SwingWorker-pool-1-thread-5] INFO  hospital.management.system.service.PatientService - Registering new patient: asdfghjk
+2026-06-01 17:32:38.219 [SwingWorker-pool-1-thread-5] INFO  hospital.management.system.service.PatientService - Patient registered successfully with ID: 8
+2026-06-01 17:35:00.770 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:35:00.772 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:35:00.945 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:35:11.871 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:35:11.945 [SwingWorker-pool-1-thread-1] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:35:54.507 [SwingWorker-pool-1-thread-2] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:35:54.559 [SwingWorker-pool-1-thread-2] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:37:38.462 [SwingWorker-pool-1-thread-3] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: vp
+2026-06-01 17:37:38.464 [SwingWorker-pool-1-thread-3] WARN  hospital.management.system.service.AuthService - Authentication failed (user not found or inactive) for user: vp
+2026-06-01 17:39:15.959 [SwingWorker-pool-1-thread-4] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: reception
+2026-06-01 17:39:16.010 [SwingWorker-pool-1-thread-4] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: reception
+2026-06-01 17:39:24.217 [SwingWorker-pool-1-thread-5] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: reception
+2026-06-01 17:39:24.265 [SwingWorker-pool-1-thread-5] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: reception
+2026-06-01 17:44:39.219 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:44:39.221 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:44:39.390 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:44:52.529 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:44:52.604 [SwingWorker-pool-1-thread-1] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:45:44.714 [SwingWorker-pool-1-thread-2] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:45:44.765 [SwingWorker-pool-1-thread-2] WARN  hospital.management.system.service.AuthService - Authentication failed (wrong password) for user: admin
+2026-06-01 17:52:44.486 [main] INFO  hospital.management.system.HospitalManagementApp - Starting Hospital Management System...
+2026-06-01 17:52:44.489 [main] INFO  hospital.management.system.config.DatabaseManager - Database configuration loaded from db.properties
+2026-06-01 17:52:44.701 [main] INFO  hospital.management.system.config.DatabaseManager - Database connection pool initialized successfully
+2026-06-01 17:52:59.906 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication attempt for user: admin
+2026-06-01 17:52:59.931 [SwingWorker-pool-1-thread-1] WARN  hospital.management.system.service.AuthService - Encountered legacy plaintext password for user: admin. Attempting seamless migration.
+2026-06-01 17:52:59.996 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Successfully migrated legacy password to BCrypt for user: admin
+2026-06-01 17:52:59.996 [SwingWorker-pool-1-thread-1] INFO  hospital.management.system.service.AuthService - Authentication successful for user: admin
+2026-06-01 17:53:53.468 [SwingWorker-pool-1-thread-4] INFO  hospital.management.system.service.PatientService - Registering new patient: qwert
+2026-06-01 17:53:53.478 [SwingWorker-pool-1-thread-4] INFO  hospital.management.system.service.PatientService - Patient registered successfully with ID: 1
+2026-06-01 17:55:12.106 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Generating bill for patient ID: 1
+2026-06-01 17:55:12.117 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Bill generated successfully for patient ID: 1
+2026-06-01 17:56:00.337 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Generating bill for patient ID: 1
+2026-06-01 17:56:00.347 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Bill generated successfully for patient ID: 1
+2026-06-01 17:56:43.880 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Generating bill for patient ID: 1
+2026-06-01 17:56:43.889 [AWT-EventQueue-0] INFO  hospital.management.system.service.BillingService - Bill generated successfully for patient ID: 1
+2026-06-01 17:56:46.780 [SwingWorker-pool-1-thread-4] INFO  h.management.system.service.DischargeService - Starting discharge process for patient ID: 1
+2026-06-01 17:56:46.789 [SwingWorker-pool-1-thread-4] INFO  h.management.system.service.DischargeService - Patient 1 discharged successfully

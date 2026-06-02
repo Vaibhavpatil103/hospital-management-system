@@ -1,0 +1,7 @@
+package hospital.management.system.model;
+
+public enum Role {
+    ADMIN,
+    RECEPTIONIST,
+    DOCTOR
+}
