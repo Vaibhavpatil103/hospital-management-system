@@ -183,7 +183,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Vaibhav Patil**
 - 💼 LinkedIn: [Vaibhav Patil](https://www.linkedin.com/in/vaibhav-patil02/)
 - 🐙 GitHub: [@Vaibhavpatil103](https://github.com/Vaibhavpatil103)
-- ✉️ Email: [patilvaibhav0222@gmail.com]
+- ✉️ Email: patilvaibhav0222@gmail.com
 
 ---
 <div align="center">
