@@ -3,85 +3,55 @@
   <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
   <img src="https://img.shields.io/badge/Swing-ED8B00?style=for-the-badge&logo=java&logoColor=white" alt="Swing" />
   <img src="https://img.shields.io/badge/FlatLaf-4CAF50?style=for-the-badge&logo=java&logoColor=white" alt="FlatLaf" />
+  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven" />
 </div>
 
 <h1 align="center">Last Moment Hospital (LMH) 🏥</h1>
 
 <p align="center">
-  <strong>A comprehensive and robust Hospital Management System designed to streamline healthcare administration.</strong>
+  <strong>An enterprise-grade Hospital Management System designed to streamline healthcare administration.</strong>
 </p>
 
 ## 📖 Introduction
-**Last Moment Hospital (LMH)** is a complete Hospital Management System built with Java and MySQL. It aims to digitize and automate the day-to-day administrative operations of a healthcare facility. Built to reduce manual errors, speed up data retrieval, and optimize resource allocation, LMH provides an end-to-end solution—from patient registration and room management to discharge and billing.
+**Last Moment Hospital (LMH)** is a complete Hospital Management System built with Java 17 and MySQL. It aims to digitize and automate the day-to-day administrative operations of a healthcare facility. Built to reduce manual errors, speed up data retrieval, and optimize resource allocation, LMH provides an end-to-end solution—from patient registration and room management to discharge and billing.
 
-Whether for a small clinic or a mid-sized hospital, LMH proves its capability as a robust enterprise application suitable for high-traffic environments, serving as a reliable backbone for healthcare administrators.
+Recently refactored into a modern **3-Tier MVC Architecture**, LMH utilizes enterprise patterns such as Connection Pooling (HikariCP), Password Hashing (BCrypt), and Data Access Objects (DAO).
 
 ## ✨ Features
-- 🧑‍⚕️ **Patient Management:** Comprehensive patient lifecycle management from admission to discharge.
-- 👥 **Employee Management:** Centralized tracking of doctors, nurses, and administrative staff details.
-- 🛏️ **Room Management:** Real-time tracking of room availability, occupancy rates, and ward management.
-- 🏥 **Department Management:** Organized structure mapping doctors and staff to specific medical departments.
-- 🚑 **Ambulance Management:** Fleet tracking for emergency response and dispatch operations.
-- 💵 **Billing System:** Automated, transparent, and accurate invoicing integrated with patient services.
-- 🚪 **Discharge Management:** Streamlined workflow for clearing patients and generating final reports.
-- 🔐 **User Authentication:** Secure Role-Based Access Control (RBAC) ensuring data privacy.
-- 📊 **Dashboard Analytics:** High-level overview of hospital metrics and operational status at a glance.
-- 🗄️ **Database Integration:** Persistent, scalable, and secure data management using MySQL.
-
-## 📸 Screenshots
-
-| Login Screen | Dashboard |
-| :---: | :---: |
-| *(Add Screenshot Here)* | *(Add Screenshot Here)* |
-
-| Patient Module | Employee Module |
-| :---: | :---: |
-| *(Add Screenshot Here)* | *(Add Screenshot Here)* |
-
-| Billing Module | Room Management |
-| :---: | :---: |
-| *(Add Screenshot Here)* | *(Add Screenshot Here)* |
-
-> *Replace the placeholders with actual screenshots from your running application.*
+- 📊 **Interactive Dashboard:** Beautiful charts (JFreeChart) and real-time statistics covering revenue, occupancy, and daily appointments.
+- 🧑‍⚕️ **Patient & Doctor Management:** Comprehensive lifecycle management from admission to discharge, along with specialized doctor directories.
+- 👥 **Employee & Department Management:** Centralized tracking of hospital staff and structural mapping of hospital units.
+- 🛏️ **Room & Ward Management:** Real-time tracking of room availability and occupancy rates.
+- 💵 **Automated Billing System:** Transparent invoicing encompassing room charges, doctor fees, and deposits.
+- 📅 **Appointments & Prescriptions:** Manage outpatient appointments and digital prescriptions.
+- 🔒 **Security & Audit Logging:** Role-Based Access Control (RBAC), BCrypt password hashing, and full audit trails tracking user actions.
+- 🚑 **Ambulance Management:** Fleet tracking for emergency response.
 
 ## 🏗️ System Architecture
 The application follows a clean **3-Tier Architecture**, ensuring clear separation of concerns, easier maintenance, and scalability.
 
-1. **UI Layer (Presentation):** Built using Java Swing with the FlatLaf Look and Feel. It handles all user interactions and ensures a modern, intuitive graphical interface.
-2. **Business Logic Layer (Service):** Manages the core operations, data processing, input validation, and business rules, acting as the bridge between the UI and the data layer.
-3. **Database Layer (Data Access):** Utilizes the DAO (Data Access Object) design pattern via JDBC to securely and efficiently communicate with the MySQL database.
-
-## 🗃️ Database Design
-The LMH system utilizes a highly normalized relational database to maintain data integrity.
-
-### Main Tables & Data Flow
-- **`users`**: Stores authentication credentials and role authorizations.
-- **`patients`**: Central entity tracking demographics, assigned doctors, and current admission status.
-- **`employees`**: Maintains staff details, linked to respective departments.
-- **`departments`**: Categorizes hospital units (e.g., Cardiology, Neurology).
-- **`rooms`**: Tracks physical bed availability, linked dynamically to patient admissions.
-- **`billing` & `discharge`**: Connects patient records with financial data and discharge histories.
-
-*Data flows seamlessly from the user input through the UI to the Business Layer, where it is sanitized and processed before being committed to the normalized MySQL tables.*
+1. **UI Layer (Presentation):** Built using Java Swing with the **FlatLaf** Look and Feel for a sleek, modern UI.
+2. **Business Logic Layer (Service):** Manages core operations, data processing, input validation, and enforces business rules.
+3. **Database Layer (Data Access):** Utilizes the DAO (Data Access Object) design pattern via JDBC and **HikariCP** for connection pooling.
 
 ## 💻 Tech Stack
 | Technology | Purpose |
 | :--- | :--- |
-| **Java (JDK 8+)** | Core programming language |
-| **Java Swing** | Desktop UI Framework |
-| **FlatLaf** | Modern UI Look and Feel for Swing |
-| **JDBC** | Database connectivity and execution |
-| **MySQL** | Primary Relational Database Management System |
-| **Maven / Ant** | Build and dependency management |
-| **IntelliJ IDEA / NetBeans** | Integrated Development Environment (IDE) |
+| **Java 17** | Core programming language |
+| **Java Swing + FlatLaf** | Desktop UI Framework & Modern Theming |
+| **MySQL** | Primary Relational Database |
+| **Maven** | Build, dependency, and lifecycle management |
+| **HikariCP** | High-performance JDBC connection pooling |
+| **BCrypt (jBCrypt)** | Secure password hashing |
+| **JFreeChart** | Interactive dashboard analytics |
+| **SLF4J / Logback** | Application logging |
 
 ## 🚀 Installation Guide
 
 ### Prerequisites
-- Java Development Kit (JDK 11 or higher recommended)
-- MySQL Server & MySQL Workbench
-- Maven (if building from source)
-- Git
+- Java Development Kit (JDK 17 or higher recommended)
+- MySQL Server
+- Maven
 
 ### Step-by-Step Setup
 
@@ -92,81 +62,59 @@ The LMH system utilizes a highly normalized relational database to maintain data
    ```
 
 2. **Configure MySQL Database:**
-   - Open MySQL Workbench.
-   - Run the provided SQL script to create the schema and tables:
-     ```sql
-     source src/main/resources/schema.sql;
+   - Open your MySQL CLI or Workbench.
+   - Create the database and import the schema:
+     ```bash
+     mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hospital_management_system;"
+     mysql -u root -p hospital_management_system < src/main/resources/schema.sql
      ```
 
 3. **Update Database Credentials:**
    - Navigate to `src/main/resources/db.properties`.
-   - Update the `db.username` and `db.password` to match your local MySQL configuration.
+   - Update `db.username` and `db.password` to match your local MySQL configuration. 
 
-4. **Install Dependencies & Build:**
-   ```bash
-   mvn clean install
-   ```
+4. **Seed the Database (Optional but Recommended):**
+   - The project includes a `DataSeeder` utility that generates 50 realistic patients, appointments, and bills so the dashboard looks great immediately.
+   - Run the seeder via Maven:
+     ```bash
+     mvn exec:java -Dexec.mainClass="hospital.management.system.util.DataSeeder"
+     ```
 
-5. **Run the Application:**
-   - Execute the main class `HospitalManagementApp.java` via your IDE, or run the compiled jar file.
+5. **Build & Run the Application:**
+   - Compile the project:
+     ```bash
+     mvn clean compile
+     ```
+   - Launch the application:
+     ```bash
+     mvn exec:java -Dexec.mainClass="hospital.management.system.HospitalManagementApp"
+     ```
+
+### Default Credentials
+- **Admin Role:** Username: `admin` | Password: `admin123`
+- **Receptionist Role:** Username: `reception` | Password: `admin123`
+
+*(Note: Passwords are automatically BCrypt-hashed upon the first login).*
 
 ## 📂 Project Structure
 ```text
-hospital-management-system/
-├── src/
-│   └── main/
-│       ├── java/hospital/management/system/
-│       │   ├── config/      # Database connection and configuration utilities
-│       │   ├── dao/         # Data Access Object layer for database operations
-│       │   ├── model/       # Plain Old Java Objects (POJOs) representing DB entities
-│       │   ├── service/     # Business logic and validation rules
-│       │   ├── util/        # Helpers, Session Management, UI Factories
-│       │   └── view/        # Swing GUI components and screens
-│       └── resources/       # Icons, properties files, and SQL scripts
-├── target/                  # Compiled output and generated artifacts
-├── pom.xml                  # Maven configuration file
-└── README.md                # Project documentation
+src/
+└── main/
+    ├── java/hospital/management/system/
+    │   ├── config/      # Database connection pooling (HikariCP)
+    │   ├── dao/         # Data Access Object layer 
+    │   ├── model/       # Domain entities (POJOs)
+    │   ├── service/     # Business logic & authentication
+    │   ├── util/        # Helpers, Session Management, DataSeeder
+    │   └── view/        # Swing GUI components, Dashboards, and Forms
+    └── resources/       # Icons, db.properties, and schema.sql
 ```
 
-## 🧩 Key Modules
-- **Patients:** End-to-end flow handling new admissions, assigning rooms, updating medical records, and tracking current patient status.
-- **Employees:** Complete directory for doctors, nurses, and administrative staff including contact information and departmental assignment.
-- **Departments:** Structural management of hospital wings, enabling the categorization of specialized doctors.
-- **Rooms:** Real-time inventory of hospital beds, automatically updating availability when patients are admitted or discharged.
-- **Ambulance:** Logistics tracking for emergency vehicle dispatch, availability, and driver details.
-- **Billing:** Automated cost calculation encompassing room charges, medication, and doctor fees, generating printable invoices.
-- **Authentication:** Secure login gateway controlling system access based on user credentials.
-
 ## 🛡️ Security Features
-- **Prepared Statements:** 100% prevention against SQL Injection attacks across all database queries.
-- **Input Validation:** Strict UI-level constraints preventing invalid data, overflows, and formatting errors.
-- **Authentication Controls:** Session-based validation ensuring only authorized personnel access sensitive patient records.
-- **Database Security:** Principle of least privilege applied to database connections with modularized configuration.
-
-## 🔮 Future Enhancements
-- 👨‍⚕️ **Doctor Management & Appointment Scheduling:** Online booking system for outpatients.
-- 💊 **Pharmacy Module:** Inventory management for medicines and automated prescription pricing.
-- 🔬 **Laboratory Module:** Integration for requesting and viewing lab test results.
-- 📈 **Report Generation:** PDF and Excel export features for financial and administrative audits.
-- ☁️ **Cloud Deployment:** Migrating the database to AWS RDS for remote access.
-- 📱 **REST APIs & Mobile App Integration:** Extending the system for mobile patient portals.
-
-## ⚡ Performance & Scalability
-LMH is designed with horizontal scalability in mind. The DAO pattern ensures that swapping the underlying database (e.g., from MySQL to PostgreSQL) requires minimal refactoring. Connection pooling can easily be integrated to handle thousands of concurrent transactions in a large-scale hospital environment, while the optimized Swing UI runs smoothly on low-end administrative hardware.
-
-## 🎓 Learning Outcomes
-This project serves as a comprehensive masterclass in core software engineering principles:
-- **OOP Concepts:** Deep application of Inheritance, Encapsulation, Polymorphism, and Abstraction.
-- **JDBC & Database Design:** Mastery of relational database schemas, normalization, and complex querying.
-- **Swing UI Development:** Building responsive, modern desktop applications outside the standard web ecosystem.
-- **Software Architecture:** Practical implementation of the MVC/3-Tier architecture and DAO design patterns.
-
-## 💼 Resume Impact
-**Why this project stands out:**
-- **Full-Stack Development Skills:** Demonstrates the ability to build a complete application from the database schema up to the graphical user interface.
-- **Database Skills:** Proves competence in modeling complex real-world relationships and ensuring data integrity.
-- **Problem Solving:** Translates intricate real-world business requirements (hospital administration) into functional code.
-- **Software Engineering Practices:** Showcases understanding of clean code, architectural patterns, and professional documentation.
+- **Prepared Statements:** 100% prevention against SQL Injection attacks.
+- **Password Hashing:** Passwords are never stored in plain text (jBCrypt).
+- **Audit Logging:** Critical actions (Logins, Discharges, Updates) are tracked in the `audit_logs` table.
+- **Connection Pooling:** HikariCP prevents database connection leaks and memory exhaustion.
 
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome! 
