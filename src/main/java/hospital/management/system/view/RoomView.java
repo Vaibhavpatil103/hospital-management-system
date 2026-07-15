@@ -9,28 +9,26 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class RoomView extends BaseFrame {
+public class RoomView extends JPanel {
 
     private final RoomService roomService;
     private JTable table;
     private DefaultTableModel tableModel;
 
     public RoomView() {
-        super("Room Information", 800, 600);
         this.roomService = new RoomService();
         setupUI();
         loadData();
-        setVisible(true);
     }
 
     private void setupUI() {
-        contentPanel.setLayout(new BorderLayout(0, 10));
+        setLayout(new BorderLayout(0, 10));
 
         // Top Panel
         JPanel topPanel = UIComponentFactory.createPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton refreshBtn = UIComponentFactory.createPrimaryButton("Refresh", e -> loadData());
         topPanel.add(refreshBtn);
-        contentPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // Table setup
         String[] columns = {"Room ID", "Room Number", "Type", "Price Per Day", "Available"};
@@ -43,13 +41,7 @@ public class RoomView extends BaseFrame {
 
         table = new JTable(tableModel);
         JScrollPane scrollPane = UIComponentFactory.createTableScrollPane(table);
-        contentPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Footer buttons
-        JPanel buttonPanel = UIComponentFactory.createButtonPanel();
-        JButton backBtn = UIComponentFactory.createDangerButton("Back", e -> dispose());
-        buttonPanel.add(backBtn);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void loadData() {
@@ -74,7 +66,7 @@ public class RoomView extends BaseFrame {
                         });
                     }
                 } catch (Exception e) {
-                    showError("Failed to load rooms: " + e.getMessage());
+                    JOptionPane.showMessageDialog(RoomView.this, "Failed to load rooms: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };

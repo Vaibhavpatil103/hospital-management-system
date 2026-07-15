@@ -9,6 +9,8 @@ import hospital.management.system.model.User;
 public final class SessionManager {
 
     private static User currentUser;
+    private static long lastActivityTime = 0;
+    private static final long SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
     private SessionManager() {}
 
@@ -20,6 +22,7 @@ public final class SessionManager {
             throw new IllegalArgumentException("User cannot be null.");
         }
         currentUser = user;
+        updateActivity();
     }
 
     /**
@@ -27,6 +30,25 @@ public final class SessionManager {
      */
     public static void logout() {
         currentUser = null;
+        lastActivityTime = 0;
+    }
+
+    /**
+     * Updates the last activity time for the session.
+     */
+    public static void updateActivity() {
+        if (currentUser != null) {
+            lastActivityTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * Checks if a session has expired.
+     */
+    private static void checkTimeout() {
+        if (currentUser != null && (System.currentTimeMillis() - lastActivityTime) > SESSION_TIMEOUT_MS) {
+            logout();
+        }
     }
 
     /**
@@ -34,6 +56,7 @@ public final class SessionManager {
      * @return User object or null if not logged in.
      */
     public static User getCurrentUser() {
+        checkTimeout();
         return currentUser;
     }
 
@@ -41,6 +64,7 @@ public final class SessionManager {
      * Checks if a user is currently logged in.
      */
     public static boolean isLoggedIn() {
+        checkTimeout();
         return currentUser != null;
     }
 
@@ -48,6 +72,7 @@ public final class SessionManager {
      * Checks if the currently logged in user has the specified role.
      */
     public static boolean hasRole(Role role) {
+        checkTimeout();
         if (!isLoggedIn() || role == null) {
             return false;
         }

@@ -162,7 +162,7 @@ public class PatientDischargeView extends BaseFrame {
         
         Patient p = admittedPatients.get(idx);
         nameLabel.setText(p.getFullName());
-        genderLabel.setText(p.getGender());
+        genderLabel.setText(p.getGenderName());
         diseaseLabel.setText(p.getDisease());
         roomLabel.setText(p.getRoomId() != null ? String.valueOf(p.getRoomId()) : "N/A");
         depositLabel.setText("$" + p.getDeposit().toString());
@@ -179,12 +179,8 @@ public class PatientDischargeView extends BaseFrame {
         
         Patient p = admittedPatients.get(idx);
         
-        // In a real system, doctorFees and otherCharges would come from input fields or DB
-        BigDecimal doctorFees = new BigDecimal("500.00"); // Mock data
-        BigDecimal otherCharges = new BigDecimal("150.00"); // Mock data
-        
         try {
-            currentBill = billingService.generateBill(p.getPatientId(), doctorFees, otherCharges);
+            currentBill = billingService.generateBill(p.getPatientId());
             billTotalLabel.setText("$" + currentBill.getTotalAmount().toString());
             balanceDueLabel.setText("$" + currentBill.getBalanceDue().toString());
         } catch (Exception e) {

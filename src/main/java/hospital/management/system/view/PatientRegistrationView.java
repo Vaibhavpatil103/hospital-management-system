@@ -1,6 +1,8 @@
 package hospital.management.system.view;
 
+import hospital.management.system.model.Gender;
 import hospital.management.system.model.Patient;
+import hospital.management.system.model.PatientStatus;
 import hospital.management.system.model.Room;
 import hospital.management.system.service.PatientService;
 import hospital.management.system.service.RoomService;
@@ -186,9 +188,9 @@ public class PatientRegistrationView extends BaseFrame {
         patient.setContact(contactField.getText().trim());
         patient.setFullName(nameField.getText().trim());
         
-        if (maleRadio.isSelected()) patient.setGender("MALE");
-        else if (femaleRadio.isSelected()) patient.setGender("FEMALE");
-        else patient.setGender("OTHER");
+        if (maleRadio.isSelected()) patient.setGender(Gender.MALE);
+        else if (femaleRadio.isSelected()) patient.setGender(Gender.FEMALE);
+        else patient.setGender(Gender.OTHER);
         
         patient.setAge(Integer.parseInt(ageField.getText().trim()));
         patient.setDisease(diseaseField.getText().trim());
@@ -198,7 +200,7 @@ public class PatientRegistrationView extends BaseFrame {
         }
         
         patient.setDeposit(new BigDecimal(depositField.getText().trim()));
-        patient.setStatus("ADMITTED");
+        patient.setStatus(PatientStatus.ADMITTED);
         patient.setAdmissionTime(LocalDateTime.now());
 
         SwingWorker<Void, Void> worker = new SwingWorker<>() {

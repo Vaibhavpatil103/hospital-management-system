@@ -43,7 +43,7 @@ public class BillDAO {
             pstmt.setBigDecimal(5, bill.getTotalAmount());
             pstmt.setBigDecimal(6, bill.getDepositPaid());
             pstmt.setBigDecimal(7, bill.getBalanceDue());
-            pstmt.setString(8, bill.getStatus());
+            pstmt.setString(8, bill.getStatusName());
             
             pstmt.executeUpdate();
             

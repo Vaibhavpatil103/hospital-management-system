@@ -1,6 +1,7 @@
 package hospital.management.system.view;
 
 import hospital.management.system.model.Bill;
+import hospital.management.system.model.BillStatus;
 import hospital.management.system.model.Patient;
 import hospital.management.system.service.BillingService;
 import hospital.management.system.service.PatientService;
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
-public class BillingView extends BaseFrame {
+public class BillingView extends JPanel {
 
     private final PatientService patientService;
     private final BillingService billingService;
@@ -27,17 +28,15 @@ public class BillingView extends BaseFrame {
     private Bill currentBill;
 
     public BillingView() {
-        super("Billing & Invoices", 800, 600);
         this.patientService = new PatientService();
         this.billingService = new BillingService();
         
         setupUI();
         loadPatients();
-        setVisible(true);
     }
 
     private void setupUI() {
-        contentPanel.setLayout(new BorderLayout(0, 15));
+        setLayout(new BorderLayout(0, 15));
 
         // Top Selection Panel
         JPanel topPanel = UIComponentFactory.createPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
@@ -45,7 +44,7 @@ public class BillingView extends BaseFrame {
         patientCombo = UIComponentFactory.createComboBox(new String[]{"Loading..."});
         patientCombo.addActionListener(e -> fetchBill());
         topPanel.add(patientCombo);
-        contentPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // Bill Details Panel
         JPanel detailsPanel = UIComponentFactory.createCardPanel();
@@ -106,18 +105,18 @@ public class BillingView extends BaseFrame {
         balanceLabel.setForeground(AppTheme.DANGER);
         gbc.gridx = 1; detailsPanel.add(balanceLabel, gbc);
 
-        contentPanel.add(detailsPanel, BorderLayout.CENTER);
+        add(detailsPanel, BorderLayout.CENTER);
 
         // Footer buttons
         JPanel buttonPanel = UIComponentFactory.createButtonPanel();
+        JButton generateBtn = UIComponentFactory.createPrimaryButton("Generate Bill", e -> generateBillForPatient());
         JButton payBtn = UIComponentFactory.createSuccessButton("Mark as Paid", e -> markAsPaid());
         JButton printBtn = UIComponentFactory.createPrimaryButton("Print Invoice", e -> printInvoice());
-        JButton backBtn = UIComponentFactory.createDangerButton("Back", e -> dispose());
         
+        buttonPanel.add(generateBtn);
         buttonPanel.add(payBtn);
         buttonPanel.add(printBtn);
-        buttonPanel.add(backBtn);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void loadPatients() {
@@ -143,7 +142,7 @@ public class BillingView extends BaseFrame {
                         patientCombo.setEnabled(true);
                     }
                 } catch (Exception e) {
-                    showError("Failed to load patients.");
+                    JOptionPane.showMessageDialog(BillingView.this, "Failed to load patients.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -169,8 +168,8 @@ public class BillingView extends BaseFrame {
                     if (billOpt.isPresent()) {
                         currentBill = billOpt.get();
                         billIdLabel.setText(String.valueOf(currentBill.getBillId()));
-                        statusLabel.setText(currentBill.getStatus());
-                        if ("PAID".equals(currentBill.getStatus())) {
+                        statusLabel.setText(currentBill.getStatusName());
+                        if (BillStatus.PAID == currentBill.getStatus()) {
                             statusLabel.setForeground(AppTheme.SUCCESS);
                         } else {
                             statusLabel.setForeground(AppTheme.WARNING);
@@ -188,7 +187,7 @@ public class BillingView extends BaseFrame {
                         billIdLabel.setText("No Bill Generated");
                     }
                 } catch (Exception e) {
-                    showError("Failed to fetch bill.");
+                    JOptionPane.showMessageDialog(BillingView.this, "Failed to fetch bill.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -208,11 +207,11 @@ public class BillingView extends BaseFrame {
 
     private void markAsPaid() {
         if (currentBill == null) {
-            showWarning("No bill selected.");
+            JOptionPane.showMessageDialog(this, "No bill selected.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if ("PAID".equals(currentBill.getStatus())) {
-            showWarning("Bill is already paid.");
+        if (BillStatus.PAID == currentBill.getStatus()) {
+            JOptionPane.showMessageDialog(this, "Bill is already paid.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -227,10 +226,42 @@ public class BillingView extends BaseFrame {
             protected void done() {
                 try {
                     get();
-                    showSuccess("Bill marked as PAID successfully.");
+                    JOptionPane.showMessageDialog(BillingView.this, "Bill marked as PAID successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     fetchBill(); // Refresh display
                 } catch (Exception e) {
-                    showError("Failed to mark bill as paid: " + e.getMessage());
+                    JOptionPane.showMessageDialog(BillingView.this, "Failed to mark bill as paid: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    private void generateBillForPatient() {
+        int idx = patientCombo.getSelectedIndex();
+        if (idx < 0 || patients == null || patients.isEmpty()) return;
+        
+        int patientId = patients.get(idx).getPatientId();
+        
+        if (currentBill != null) {
+            int confirm = JOptionPane.showConfirmDialog(this, "A bill already exists. Generate a new one? (Old one will be overridden or just create a new record)", "Confirm", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) return;
+        }
+
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                billingService.generateBill(patientId);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    JOptionPane.showMessageDialog(BillingView.this, "Bill generated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    fetchBill(); // Refresh display
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(BillingView.this, "Failed to generate bill: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -239,10 +270,10 @@ public class BillingView extends BaseFrame {
 
     private void printInvoice() {
         if (currentBill == null) {
-            showWarning("No bill selected to print.");
+            JOptionPane.showMessageDialog(this, "No bill selected to print.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         // In a real app, this would use a reporting library like JasperReports or create a PDF.
-        showSuccess("Invoice printing simulated successfully!");
+        JOptionPane.showMessageDialog(this, "Invoice printing simulated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -1,10 +1,9 @@
 package hospital.management.system.view;
 
-import hospital.management.system.dao.EmployeeDAO;
+import hospital.management.system.service.EmployeeService;
 import hospital.management.system.model.Employee;
 import hospital.management.system.model.Role;
 import hospital.management.system.util.AppTheme;
-import hospital.management.system.util.InputValidator;
 import hospital.management.system.util.SessionManager;
 import hospital.management.system.util.UIComponentFactory;
 
@@ -14,24 +13,21 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class EmployeeView extends BaseFrame {
+public class EmployeeView extends JPanel {
 
-    private final EmployeeDAO employeeDAO;
+    private final EmployeeService employeeService;
     private JTable table;
     private DefaultTableModel tableModel;
     private List<Employee> currentEmployees;
 
     public EmployeeView() {
-        super("Employee Information", 1100, 700);
-        this.employeeDAO = new EmployeeDAO();
-        
+        this.employeeService = new EmployeeService();
         setupUI();
         loadData();
-        setVisible(true);
     }
 
     private void setupUI() {
-        contentPanel.setLayout(new BorderLayout(0, 10));
+        setLayout(new BorderLayout(0, 10));
 
         // Top Panel for Search and Action Buttons
         JPanel topPanel = UIComponentFactory.createPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
@@ -48,7 +44,7 @@ public class EmployeeView extends BaseFrame {
             topPanel.add(deleteBtn);
         }
 
-        contentPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // Table setup
         boolean isAdmin = SessionManager.hasRole(Role.ADMIN);
@@ -65,20 +61,14 @@ public class EmployeeView extends BaseFrame {
 
         table = new JTable(tableModel);
         JScrollPane scrollPane = UIComponentFactory.createTableScrollPane(table);
-        contentPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Footer buttons
-        JPanel buttonPanel = UIComponentFactory.createButtonPanel();
-        JButton backBtn = UIComponentFactory.createSecondaryButton("Back", e -> dispose());
-        buttonPanel.add(backBtn);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void loadData() {
         SwingWorker<List<Employee>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<Employee> doInBackground() {
-                return employeeDAO.findAll();
+                return employeeService.getAllEmployees();
             }
 
             @Override
@@ -105,7 +95,7 @@ public class EmployeeView extends BaseFrame {
                         }
                     }
                 } catch (Exception e) {
-                    showError("Failed to load employee data: " + e.getMessage());
+                    JOptionPane.showMessageDialog(EmployeeView.this, "Failed to load employee data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -113,7 +103,7 @@ public class EmployeeView extends BaseFrame {
     }
 
     private void showEmployeeDialog(Employee employee) {
-        JDialog dialog = new JDialog(this, employee == null ? "Add Employee" : "Update Employee", true);
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), employee == null ? "Add Employee" : "Update Employee", true);
         dialog.setSize(400, 500);
         dialog.setLocationRelativeTo(this);
 
@@ -164,16 +154,33 @@ public class EmployeeView extends BaseFrame {
         gbc.gridx = 1; panel.add(aadharField, gbc);
 
         JButton saveBtn = UIComponentFactory.createPrimaryButton("Save", e -> {
-            if (!validateInputs(nameField, ageField, phoneField, salaryField, aadharField, emailField)) return;
-
             Employee emp = employee != null ? employee : new Employee();
             emp.setFullName(nameField.getText().trim());
-            emp.setAge(Integer.parseInt(ageField.getText().trim()));
-            if (!deptField.getText().trim().isEmpty()) {
-                emp.setDepartmentId(Integer.parseInt(deptField.getText().trim()));
+            
+            try {
+                emp.setAge(Integer.parseInt(ageField.getText().trim()));
+            } catch (NumberFormatException ex) {
+                // Let service validation handle missing/invalid age, or set to -1
+                emp.setAge(-1);
             }
+            
+            if (!deptField.getText().trim().isEmpty()) {
+                try {
+                    emp.setDepartmentId(Integer.parseInt(deptField.getText().trim()));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(EmployeeView.this, "Department ID must be a number", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            
             emp.setPhone(phoneField.getText().trim());
-            emp.setSalary(new BigDecimal(salaryField.getText().trim()));
+            
+            try {
+                emp.setSalary(new BigDecimal(salaryField.getText().trim()));
+            } catch (NumberFormatException ex) {
+                emp.setSalary(BigDecimal.valueOf(-1));
+            }
+            
             emp.setEmail(emailField.getText().trim());
             emp.setAadharNumber(aadharField.getText().trim());
 
@@ -181,9 +188,9 @@ public class EmployeeView extends BaseFrame {
                 @Override
                 protected Void doInBackground() {
                     if (employee == null) {
-                        employeeDAO.save(emp);
+                        employeeService.addEmployee(emp);
                     } else {
-                        employeeDAO.update(emp);
+                        employeeService.updateEmployee(emp);
                     }
                     return null;
                 }
@@ -194,9 +201,9 @@ public class EmployeeView extends BaseFrame {
                         get();
                         dialog.dispose();
                         loadData();
-                        showSuccess("Employee saved successfully.");
+                        JOptionPane.showMessageDialog(EmployeeView.this, "Employee saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
-                        showError("Failed to save employee: " + ex.getCause().getMessage());
+                        JOptionPane.showMessageDialog(EmployeeView.this, "Failed to save employee: " + (ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             };
@@ -217,7 +224,7 @@ public class EmployeeView extends BaseFrame {
     private void updateSelectedEmployee() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            showWarning("Please select an employee to update.");
+            JOptionPane.showMessageDialog(this, "Please select an employee to update.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int empId = (int) tableModel.getValueAt(row, 0);
@@ -230,7 +237,7 @@ public class EmployeeView extends BaseFrame {
     private void deleteSelectedEmployee() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            showWarning("Please select an employee to delete.");
+            JOptionPane.showMessageDialog(this, "Please select an employee to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -242,7 +249,7 @@ public class EmployeeView extends BaseFrame {
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override
             protected Void doInBackground() {
-                employeeDAO.delete(empId);
+                employeeService.deleteEmployee(empId);
                 return null;
             }
 
@@ -250,37 +257,13 @@ public class EmployeeView extends BaseFrame {
             protected void done() {
                 try {
                     get();
-                    showSuccess("Employee deleted.");
+                    JOptionPane.showMessageDialog(EmployeeView.this, "Employee deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     loadData();
                 } catch (Exception ex) {
-                    showError("Failed to delete employee: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(EmployeeView.this, "Failed to delete employee: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
         worker.execute();
-    }
-
-    private boolean validateInputs(JTextField name, JTextField age, JTextField phone, JTextField salary, JTextField aadhar, JTextField email) {
-        InputValidator.ValidationResult v;
-        
-        v = InputValidator.validateRequired(name.getText(), "Name");
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validateEmployeeAge(age.getText());
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validatePhone(phone.getText());
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validatePositiveAmount(salary.getText(), "Salary");
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validateAadhar(aadhar.getText());
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validateEmail(email.getText());
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        return true;
     }
 }

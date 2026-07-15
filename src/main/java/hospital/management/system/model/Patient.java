@@ -5,18 +5,21 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Patient {
+    // Status constants for backward compatibility
+    public static final String STATUS_ADMITTED = PatientStatus.ADMITTED.name();
+    public static final String STATUS_DISCHARGED = PatientStatus.DISCHARGED.name();
     private int patientId;
-    private String idType; // Enum string: AADHAR, VOTER_ID, etc.
+    private IdType idType;
     private String idNumber;
     private String contact;
     private String fullName;
-    private String gender; // MALE, FEMALE, OTHER
+    private Gender gender;
     private int age;
     private String disease;
     private Integer roomId; // Can be null if discharged
     private LocalDateTime admissionTime;
     private BigDecimal deposit;
-    private String status; // ADMITTED, DISCHARGED
+    private PatientStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -30,12 +33,20 @@ public class Patient {
         this.patientId = patientId;
     }
 
-    public String getIdType() {
+    public IdType getIdType() {
         return idType;
     }
 
-    public void setIdType(String idType) {
+    public String getIdTypeName() {
+        return idType != null ? idType.name() : null;
+    }
+
+    public void setIdType(IdType idType) {
         this.idType = idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = IdType.fromString(idType);
     }
 
     public String getIdNumber() {
@@ -62,12 +73,20 @@ public class Patient {
         this.fullName = fullName;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public String getGenderName() {
+        return gender != null ? gender.name() : null;
+    }
+
+    public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = Gender.fromString(gender);
     }
 
     public int getAge() {
@@ -110,12 +129,20 @@ public class Patient {
         this.deposit = deposit;
     }
 
-    public String getStatus() {
+    public PatientStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public String getStatusName() {
+        return status != null ? status.name() : null;
+    }
+
+    public void setStatus(PatientStatus status) {
         this.status = status;
+    }
+
+    public void setStatus(String status) {
+        this.status = PatientStatus.fromString(status);
     }
 
     public LocalDateTime getCreatedAt() {

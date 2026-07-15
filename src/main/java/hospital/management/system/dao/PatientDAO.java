@@ -128,11 +128,11 @@ public class PatientDAO {
     }
 
     private void setPatientParameters(PreparedStatement pstmt, Patient patient) throws SQLException {
-        pstmt.setString(1, patient.getIdType());
+        pstmt.setString(1, patient.getIdTypeName());
         pstmt.setString(2, patient.getIdNumber());
         pstmt.setString(3, patient.getContact());
         pstmt.setString(4, patient.getFullName());
-        pstmt.setString(5, patient.getGender());
+        pstmt.setString(5, patient.getGenderName());
         pstmt.setInt(6, patient.getAge());
         pstmt.setString(7, patient.getDisease());
         
@@ -143,7 +143,7 @@ public class PatientDAO {
         }
         
         pstmt.setBigDecimal(9, patient.getDeposit());
-        pstmt.setString(10, patient.getStatus());
+        pstmt.setString(10, patient.getStatusName());
     }
 
     private Patient mapResultSetToPatient(ResultSet rs) throws SQLException {

@@ -16,7 +16,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <main.class>hospital.management.system.Main</main.class>
+        <main.class>hospital.management.system.HospitalManagementApp</main.class>
     </properties>
 
     <dependencies>
@@ -62,21 +62,26 @@
             <version>1.5.6</version>
         </dependency>
 
-        <!-- rs2xml - ResultSet to TableModel -->
-        <dependency>
-            <groupId>net.proteanit</groupId>
-            <artifactId>resultset2xml</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${user.home}/Downloads/ResultSet2xml (1).jar</systemPath>
-        </dependency>
-
         <!-- JUnit 5 for Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- MigLayout for advanced responsive layouts -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.3</version>
+        </dependency>
+
+        <!-- JFreeChart for dashboard analytics -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.4</version>
         </dependency>
     </dependencies>
 

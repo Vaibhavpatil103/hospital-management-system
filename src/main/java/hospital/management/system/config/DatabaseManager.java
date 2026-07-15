@@ -88,6 +88,25 @@ public final class DatabaseManager {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load database configuration", e);
         }
+
+        // Environment variables override properties file (for secure deployment)
+        String envUrl = System.getenv("HMS_DB_URL");
+        String envUser = System.getenv("HMS_DB_USER");
+        String envPassword = System.getenv("HMS_DB_PASSWORD");
+
+        if (envUrl != null && !envUrl.isBlank()) {
+            props.setProperty("db.url", envUrl);
+            logger.info("DB URL overridden by HMS_DB_URL environment variable");
+        }
+        if (envUser != null && !envUser.isBlank()) {
+            props.setProperty("db.username", envUser);
+            logger.info("DB username overridden by HMS_DB_USER environment variable");
+        }
+        if (envPassword != null && !envPassword.isBlank()) {
+            props.setProperty("db.password", envPassword);
+            logger.info("DB password overridden by HMS_DB_PASSWORD environment variable");
+        }
+
         return props;
     }
 }

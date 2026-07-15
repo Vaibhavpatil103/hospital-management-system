@@ -1,7 +1,7 @@
 package hospital.management.system.service;
 
 import hospital.management.system.config.DatabaseManager;
-import hospital.management.system.dao.DataAccessException;
+import hospital.management.system.dao.*;
 import hospital.management.system.model.Bill;
 import hospital.management.system.model.DischargeRecord;
 import hospital.management.system.model.Patient;
@@ -13,6 +13,18 @@ import java.time.LocalDateTime;
 
 public class DischargeService {
     private static final Logger logger = LoggerFactory.getLogger(DischargeService.class);
+
+    private final DischargeDAO dischargeDAO;
+    private final PatientDAO patientDAO;
+    private final RoomDAO roomDAO;
+    private final AuditService auditService;
+
+    public DischargeService() {
+        this.dischargeDAO = new DischargeDAO();
+        this.patientDAO = new PatientDAO();
+        this.roomDAO = new RoomDAO();
+        this.auditService = new AuditService();
+    }
 
     /**
      * Discharges a patient transactionally.
@@ -63,7 +75,11 @@ public class DischargeService {
             }
 
             conn.commit(); // Commit transaction
-            logger.info("Patient {} discharged successfully", patient.getPatientId());
+            
+            // Log the event
+            auditService.logEvent("DISCHARGE", "Discharged patient: " + patient.getFullName(), dischargedByUserId);
+            
+            logger.info("Patient {} discharged successfully.", patient.getPatientId());
 
         } catch (SQLException e) {
             logger.error("Transaction failed during discharge for patient {}", patient.getPatientId(), e);

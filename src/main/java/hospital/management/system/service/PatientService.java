@@ -16,10 +16,12 @@ public class PatientService {
     private static final Logger logger = LoggerFactory.getLogger(PatientService.class);
     private final PatientDAO patientDAO;
     private final RoomDAO roomDAO;
+    private final AuditService auditService;
 
     public PatientService() {
         this.patientDAO = new PatientDAO();
         this.roomDAO = new RoomDAO();
+        this.auditService = new AuditService();
     }
 
     public List<Patient> getAllAdmittedPatients() {
@@ -34,7 +36,7 @@ public class PatientService {
         logger.info("Registering new patient: {}", patient.getFullName());
         
         // 1. Business validation: duplicate check
-        if (patientDAO.exists(patient.getIdType(), patient.getIdNumber())) {
+        if (patientDAO.exists(patient.getIdTypeName(), patient.getIdNumber())) {
             throw new IllegalStateException("A patient with this ID already exists in the system.");
         }
 
@@ -49,11 +51,17 @@ public class PatientService {
         // 3. Save patient and update room (Normally we'd use a transaction here, 
         // but since we aren't using Spring/Hibernate, we'll just do it sequentially for simplicity.
         // A true enterprise app would manage the transaction context.)
+        patient.setAdmissionTime(java.time.LocalDateTime.now());
         patientDAO.save(patient);
         
         if (patient.getRoomId() != null) {
             roomDAO.updateAvailability(patient.getRoomId(), false);
         }
+        
+        // Log the event
+        hospital.management.system.model.User currentUser = hospital.management.system.util.SessionManager.getCurrentUser();
+        Integer userId = currentUser != null ? currentUser.getUserId() : null;
+        auditService.logEvent("ADMISSION", "Admitted patient: " + patient.getFullName(), userId);
         
         logger.info("Patient registered successfully with ID: {}", patient.getPatientId());
     }

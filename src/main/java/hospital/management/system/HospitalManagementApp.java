@@ -28,6 +28,8 @@ public class HospitalManagementApp {
 
         // Setup FlatLaf Look and Feel for modern UI
         try {
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
             UIManager.setLookAndFeel(new FlatLightLaf());
             // Optional: Customize FlatLaf defaults here
             UIManager.put("Button.arc", 10);

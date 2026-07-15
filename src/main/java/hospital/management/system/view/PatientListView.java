@@ -9,28 +9,26 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class PatientListView extends BaseFrame {
+public class PatientListView extends JPanel {
 
     private final PatientService patientService;
     private JTable table;
     private DefaultTableModel tableModel;
 
     public PatientListView() {
-        super("All Admitted Patients", 1000, 600);
         this.patientService = new PatientService();
         setupUI();
         loadData();
-        setVisible(true);
     }
 
     private void setupUI() {
-        contentPanel.setLayout(new BorderLayout(0, 10));
+        setLayout(new BorderLayout(0, 10));
 
         // Top panel for search/refresh (Search is placeholder for future enhancement)
         JPanel topPanel = UIComponentFactory.createPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton refreshBtn = UIComponentFactory.createPrimaryButton("Refresh Data", e -> loadData());
         topPanel.add(refreshBtn);
-        contentPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // Table setup
         String[] columns = {"ID", "ID Type", "ID Number", "Name", "Contact", "Gender", "Room", "Admission Date", "Deposit"};
@@ -43,13 +41,7 @@ public class PatientListView extends BaseFrame {
 
         table = new JTable(tableModel);
         JScrollPane scrollPane = UIComponentFactory.createTableScrollPane(table);
-        contentPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Footer buttons
-        JPanel buttonPanel = UIComponentFactory.createButtonPanel();
-        JButton backBtn = UIComponentFactory.createDangerButton("Back", e -> dispose());
-        buttonPanel.add(backBtn);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void loadData() {
@@ -68,18 +60,18 @@ public class PatientListView extends BaseFrame {
                     for (Patient p : patients) {
                         tableModel.addRow(new Object[]{
                             p.getPatientId(),
-                            p.getIdType(),
+                            p.getIdTypeName(),
                             p.getIdNumber(),
                             p.getFullName(),
                             p.getContact(),
-                            p.getGender(),
+                            p.getGenderName(),
                             p.getRoomId() != null ? "Room ID: " + p.getRoomId() : "N/A",
                             p.getAdmissionTime().toLocalDate().toString(),
                             "$" + p.getDeposit()
                         });
                     }
                 } catch (Exception e) {
-                    showError("Failed to load patient data: " + e.getMessage());
+                    JOptionPane.showMessageDialog(PatientListView.this, "Failed to load patient data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };

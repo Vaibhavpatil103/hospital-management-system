@@ -1,6 +1,6 @@
 package hospital.management.system.view;
 
-import hospital.management.system.dao.AmbulanceDAO;
+import hospital.management.system.service.AmbulanceService;
 import hospital.management.system.model.Ambulance;
 import hospital.management.system.model.Role;
 import hospital.management.system.util.AppTheme;
@@ -13,24 +13,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class AmbulanceView extends BaseFrame {
+public class AmbulanceView extends JPanel {
 
-    private final AmbulanceDAO ambulanceDAO;
+    private final AmbulanceService ambulanceService;
     private JTable table;
     private DefaultTableModel tableModel;
     private List<Ambulance> currentAmbulances;
 
     public AmbulanceView() {
-        super("Ambulance Services", 900, 600);
-        this.ambulanceDAO = new AmbulanceDAO();
-        
+        this.ambulanceService = new AmbulanceService();
         setupUI();
         loadData();
-        setVisible(true);
     }
 
     private void setupUI() {
-        contentPanel.setLayout(new BorderLayout(0, 10));
+        setLayout(new BorderLayout(0, 10));
 
         // Top Panel
         JPanel topPanel = UIComponentFactory.createPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
@@ -49,7 +46,7 @@ public class AmbulanceView extends BaseFrame {
             }
         }
         
-        contentPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // Table
         String[] columns = {"ID", "Driver Name", "Contact", "Vehicle Name", "Status", "Location", "Added"};
@@ -62,20 +59,14 @@ public class AmbulanceView extends BaseFrame {
 
         table = new JTable(tableModel);
         JScrollPane scrollPane = UIComponentFactory.createTableScrollPane(table);
-        contentPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Footer buttons
-        JPanel buttonPanel = UIComponentFactory.createButtonPanel();
-        JButton backBtn = UIComponentFactory.createSecondaryButton("Back", e -> dispose());
-        buttonPanel.add(backBtn);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void loadData() {
         SwingWorker<List<Ambulance>, Void> worker = new SwingWorker<>() {
             @Override
             protected List<Ambulance> doInBackground() {
-                return ambulanceDAO.findAll();
+                return ambulanceService.getAllAmbulances();
             }
 
             @Override
@@ -91,7 +82,7 @@ public class AmbulanceView extends BaseFrame {
                         });
                     }
                 } catch (Exception e) {
-                    showError("Failed to load ambulances: " + e.getMessage());
+                    JOptionPane.showMessageDialog(AmbulanceView.this, "Failed to load ambulances: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -99,7 +90,7 @@ public class AmbulanceView extends BaseFrame {
     }
 
     private void showAmbulanceDialog(Ambulance ambulance) {
-        JDialog dialog = new JDialog(this, ambulance == null ? "Add Ambulance" : "Update Ambulance", true);
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), ambulance == null ? "Add Ambulance" : "Update Ambulance", true);
         dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(this);
 
@@ -140,8 +131,6 @@ public class AmbulanceView extends BaseFrame {
         gbc.gridx = 1; panel.add(locationField, gbc);
 
         JButton saveBtn = UIComponentFactory.createPrimaryButton("Save", e -> {
-            if (!validateInputs(driverField, contactField, vehicleField)) return;
-
             Ambulance amb = ambulance != null ? ambulance : new Ambulance();
             amb.setDriverName(driverField.getText().trim());
             amb.setContact(contactField.getText().trim());
@@ -153,9 +142,9 @@ public class AmbulanceView extends BaseFrame {
                 @Override
                 protected Void doInBackground() {
                     if (ambulance == null) {
-                        ambulanceDAO.save(amb);
+                        ambulanceService.addAmbulance(amb);
                     } else {
-                        ambulanceDAO.update(amb);
+                        ambulanceService.updateAmbulance(amb);
                     }
                     return null;
                 }
@@ -166,9 +155,9 @@ public class AmbulanceView extends BaseFrame {
                         get();
                         dialog.dispose();
                         loadData();
-                        showSuccess("Ambulance saved.");
+                        JOptionPane.showMessageDialog(AmbulanceView.this, "Ambulance saved.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
-                        showError("Failed to save ambulance: " + ex.getCause().getMessage());
+                        JOptionPane.showMessageDialog(AmbulanceView.this, "Failed to save ambulance: " + (ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             };
@@ -186,25 +175,12 @@ public class AmbulanceView extends BaseFrame {
         dialog.setVisible(true);
     }
 
-    private boolean validateInputs(JTextField driver, JTextField contact, JTextField vehicle) {
-        InputValidator.ValidationResult v;
-        
-        v = InputValidator.validateRequired(driver.getText(), "Driver Name");
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validatePhone(contact.getText());
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        v = InputValidator.validateRequired(vehicle.getText(), "Vehicle Name");
-        if (!v.isValid()) { showError(v.getErrorMessage()); return false; }
-        
-        return true;
-    }
+    // Manual validation removed; handled by AmbulanceService
 
     private void updateSelected() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            showWarning("Select an ambulance to update.");
+            JOptionPane.showMessageDialog(this, "Select an ambulance to update.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int id = (int) tableModel.getValueAt(row, 0);
@@ -217,7 +193,7 @@ public class AmbulanceView extends BaseFrame {
     private void deleteSelected() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            showWarning("Select an ambulance to delete.");
+            JOptionPane.showMessageDialog(this, "Select an ambulance to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int id = (int) tableModel.getValueAt(row, 0);
@@ -226,7 +202,7 @@ public class AmbulanceView extends BaseFrame {
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() {
-                    ambulanceDAO.delete(id);
+                    ambulanceService.deleteAmbulance(id);
                     return null;
                 }
                 @Override
@@ -234,9 +210,9 @@ public class AmbulanceView extends BaseFrame {
                     try {
                         get();
                         loadData();
-                        showSuccess("Ambulance deleted.");
+                        JOptionPane.showMessageDialog(AmbulanceView.this, "Ambulance deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception e) {
-                        showError("Failed to delete: " + e.getMessage());
+                        JOptionPane.showMessageDialog(AmbulanceView.this, "Failed to delete: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             };

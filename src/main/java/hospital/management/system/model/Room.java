@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Room {
     private int roomId;
     private String roomNumber;
-    private String roomType; // GENERAL, PRIVATE, ICU
+    private RoomType roomType;
     private BigDecimal pricePerDay;
     private boolean available;
 
@@ -27,12 +27,20 @@ public class Room {
         this.roomNumber = roomNumber;
     }
 
-    public String getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(String roomType) {
+    public String getRoomTypeName() {
+        return roomType != null ? roomType.name() : null;
+    }
+
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = RoomType.fromString(roomType);
     }
 
     public BigDecimal getPricePerDay() {

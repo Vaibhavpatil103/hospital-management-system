@@ -13,7 +13,7 @@ public class Bill {
     private BigDecimal depositPaid;
     private BigDecimal balanceDue;
     private LocalDateTime billDate;
-    private String status; // PENDING, PAID, PARTIAL
+    private BillStatus status;
 
     public Bill() {}
 
@@ -89,11 +89,19 @@ public class Bill {
         this.billDate = billDate;
     }
 
-    public String getStatus() {
+    public BillStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public String getStatusName() {
+        return status != null ? status.name() : null;
+    }
+
+    public void setStatus(BillStatus status) {
         this.status = status;
+    }
+
+    public void setStatus(String status) {
+        this.status = BillStatus.fromString(status);
     }
 }

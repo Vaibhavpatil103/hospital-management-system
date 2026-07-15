@@ -13,9 +13,11 @@ import java.util.Optional;
 public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final UserDAO userDAO;
+    private final AuditService auditService;
 
     public AuthService() {
         this.userDAO = new UserDAO();
+        this.auditService = new AuditService();
     }
 
     /**
@@ -53,6 +55,7 @@ public class AuthService {
             if (isAuthenticated) {
                 logger.info("Authentication successful for user: {}", username);
                 userDAO.updateLastLogin(user.getUserId());
+                auditService.logEvent("LOGIN", "User logged in successfully", user.getUserId());
                 SessionManager.login(user);
                 return true;
             } else {
